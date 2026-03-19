@@ -1,0 +1,18 @@
+all:
+  children:
+    compute_nodes:
+      hosts:
+        gpu-node-01:
+          ansible_host: 10.0.1.10
+          ansible_user: ubuntu
+          greenference_hotkey: "compute-hotkey-1"
+          greenference_gpu_model: "NVIDIA H100"
+          greenference_gpu_count: 8
+          greenference_vram_gb_per_gpu: 80
+        gpu-node-02:
+          ansible_host: 10.0.1.11
+          ansible_user: ubuntu
+          greenference_hotkey: "compute-hotkey-2"
+          greenference_gpu_model: "NVIDIA A100"
+          greenference_gpu_count: 4
+          greenference_vram_gb_per_gpu: 40

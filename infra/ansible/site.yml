@@ -1,0 +1,67 @@
+---
+- name: Deploy Greenference Compute Agent
+  hosts: compute_nodes
+  become: true
+  vars:
+    compute_agent_version: "0.1.0"
+    compute_agent_port: 8006
+    volume_base_dir: /var/greenference/volumes
+    state_dir: /var/greenference/state
+
+  tasks:
+    - name: Install system dependencies
+      apt:
+        name:
+          - python3.12
+          - python3.12-venv
+          - docker.io
+          - openssh-client
+        state: present
+        update_cache: true
+
+    - name: Create greenference user
+      user:
+        name: greenference
+        system: true
+        shell: /bin/false
+        home: /opt/greenference
+
+    - name: Create volume base directory
+      file:
+        path: "{{ volume_base_dir }}"
+        state: directory
+        owner: greenference
+        group: greenference
+        mode: "0750"
+
+    - name: Create state directory
+      file:
+        path: "{{ state_dir }}"
+        state: directory
+        owner: greenference
+        group: greenference
+        mode: "0700"
+
+    - name: Install greenference-compute-agent
+      pip:
+        name: greenference-compute-agent=={{ compute_agent_version }}
+        executable: pip3
+
+    - name: Deploy systemd service
+      template:
+        src: templates/greenference-compute.service.j2
+        dest: /etc/systemd/system/greenference-compute.service
+      notify: restart compute agent
+
+    - name: Enable and start compute agent
+      systemd:
+        name: greenference-compute
+        enabled: true
+        state: started
+        daemon_reload: true
+
+  handlers:
+    - name: restart compute agent
+      systemd:
+        name: greenference-compute
+        state: restarted

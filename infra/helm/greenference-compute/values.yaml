@@ -1,0 +1,51 @@
+replicaCount: 1
+
+image:
+  repository: ghcr.io/greenferenceai/greenference-compute-agent
+  pullPolicy: IfNotPresent
+  tag: "latest"
+
+service:
+  type: ClusterIP
+  port: 8006
+
+env:
+  GREENFERENCE_MINER_HOTKEY: "compute-hotkey"
+  GREENFERENCE_MINER_PAYOUT_ADDRESS: "compute-payout"
+  GREENFERENCE_MINER_AUTH_SECRET: "compute-secret"
+  GREENFERENCE_MINER_API_BASE_URL: "http://greenference-compute:8006"
+  GREENFERENCE_MINER_VALIDATOR_URL: "http://validator:8002"
+  GREENFERENCE_CONTROL_PLANE_DATABASE_URL: "postgresql+psycopg://greenference:greenference@postgres:5432/greenference"
+  GREENFERENCE_BOOTSTRAP_MINER: "true"
+  GREENFERENCE_ENABLE_BACKGROUND_WORKERS: "true"
+  GREENFERENCE_POD_BACKEND: "process"
+  GREENFERENCE_VM_BACKEND: "stub"
+  GREENFERENCE_GPU_COUNT: "1"
+  GREENFERENCE_VRAM_GB_PER_GPU: "80"
+  GREENFERENCE_GPU_MODEL: "NVIDIA H100"
+  GREENFERENCE_GPU_SPLIT_UNITS: "100"
+  GREENFERENCE_SSH_HOST: "0.0.0.0"
+  GREENFERENCE_SSH_PORT_RANGE_START: "30000"
+  GREENFERENCE_SSH_PORT_RANGE_END: "31000"
+  GREENFERENCE_VOLUME_BASE_DIR: "/var/greenference/volumes"
+  GREENFERENCE_SUPPORTED_WORKLOAD_KINDS: "pod,vm"
+
+resources:
+  requests:
+    cpu: "250m"
+    memory: "512Mi"
+  limits:
+    cpu: "2"
+    memory: "2Gi"
+
+volumeMounts:
+  - name: compute-volumes
+    mountPath: /var/greenference/volumes
+
+volumes:
+  - name: compute-volumes
+    emptyDir: {}
+
+nodeSelector: {}
+tolerations: []
+affinity: {}
