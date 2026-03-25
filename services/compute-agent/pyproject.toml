@@ -17,9 +17,9 @@ dependencies = [
 k8s = ["kubernetes>=28.0,<29.0"]
 
 [tool.uv.sources]
-greenference-control-plane = { path = "../../../../greenference-api/services/control-plane" }
-greenference-persistence = { path = "../../../../greenference-api/packages/persistence" }
-greenference-protocol = { path = "../../../../greenference/protocol" }
+greenference-control-plane = { path = "../../../greenference-api/services/control-plane" }
+greenference-persistence = { path = "../../../greenference-api/packages/persistence" }
+greenference-protocol = { path = "../../../greenference/protocol" }
 
 [build-system]
 requires = ["hatchling"]
