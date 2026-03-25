@@ -144,6 +144,16 @@ uv sync
 
 ### 3. configure
 
+Using env file (recommended):
+
+```bash
+cp .env.example .env
+# edit .env with your values
+set -a && source .env && set +a
+```
+
+Or export directly:
+
 ```bash
 export GREENFERENCE_MINER_HOTKEY="your-hotkey"
 export GREENFERENCE_MINER_AUTH_SECRET="shared-secret-with-control-plane"
@@ -191,6 +201,30 @@ curl http://localhost:8006/agent/v1/telemetry
 
 # Active runtimes
 curl http://localhost:8006/agent/v1/runtimes/summary
+```
+
+---
+
+## running with docker
+
+Build context must be the **parent directory** containing all sibling repos:
+
+```bash
+cd your-workspace/  # parent of greenference, greenference-api, greenference-compute
+docker build -f greenference-compute/Dockerfile -t greenference-compute .
+```
+
+Run with env file:
+
+```bash
+cp greenference-compute/.env.example greenference-compute/.env
+# edit .env with your values
+
+docker run -d \
+  --env-file greenference-compute/.env \
+  -p 8006:8006 \
+  --gpus all \
+  greenference-compute
 ```
 
 ---
