@@ -46,10 +46,10 @@ BUILTIN_TEMPLATES: dict[str, TemplateSpec] = {
         description="ComfyUI diffusion UI",
     ),
     "ubuntu-ssh": TemplateSpec(
-        image="ghcr.io/greenference/ubuntu-ssh:22.04",
+        image="linuxserver/openssh-server:latest",
         port=22,
         gpu_fraction=0.0,
-        description="Bare Ubuntu 22.04 with SSH access",
+        description="Ubuntu with SSH access",
     ),
     "pytorch-jupyter": TemplateSpec(
         image="pytorch/pytorch:2.2.0-cuda12.1-cudnn8-runtime",
